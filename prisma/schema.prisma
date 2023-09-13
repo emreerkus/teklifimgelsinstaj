@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+}
+
+model Bank {
+  id      Int      @id @default(autoincrement())
+  name    String
+  maxp    Float
+  minp    Float
+  ratios  Ratio[]
+}
+
+model Ratio {
+  id       Int     @id @default(autoincrement())
+  ratio    Float
+  bank     Bank    @relation(fields: [bankid], references: [id])
+  bankid   Int     @map("bankid")
+  price    Float
+}
